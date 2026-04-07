@@ -3,7 +3,7 @@
 from enum import Enum
 from typing import Dict, List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ServiceType(str, Enum):
@@ -36,6 +36,8 @@ class ValidationStatus(str, Enum):
 
 class Location(BaseModel):
     """Geographic location model."""
+
+    model_config = ConfigDict(strict=False)
 
     lat: float = Field(..., description="Latitude")
     lng: float = Field(..., description="Longitude")
@@ -111,6 +113,8 @@ class BatchValidationSummary(BaseModel):
 
 class Competitor(BaseModel):
     """Competitor business model."""
+
+    model_config = ConfigDict(strict=False)
 
     name: str = Field(..., description="Business name")
     place_id: str = Field(..., description="Google Places ID")
@@ -217,6 +221,8 @@ class SearchParameters(BaseModel):
 
 class AnalysisResult(BaseModel):
     """Complete analysis result for a location."""
+
+    model_config = ConfigDict(strict=False)
 
     client_location: Location
     search_params: SearchParameters
