@@ -23,6 +23,51 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+def check_password() -> bool:
+    """Gate the app behind a password stored in Streamlit secrets.
+
+    Returns True if the user has entered the correct password.
+    Skips the gate entirely if no APP_PASSWORD secret is configured
+    (so local dev without a password still works).
+    """
+    try:
+        correct_password = st.secrets["APP_PASSWORD"]
+    except (KeyError, FileNotFoundError):
+        # No password configured — skip gate (local dev)
+        return True
+
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+
+    if st.session_state.authenticated:
+        return True
+
+    # Show login form
+    st.markdown(
+        """
+        <div style="text-align: center; margin-top: 4rem;">
+            <h2 style="color: #ED8B00; font-family: 'Inter', sans-serif;">
+                tuscany<span style="color: #1A1A1A;">strategy</span>
+            </h2>
+            <p style="color: #666; font-size: 0.875rem;">ABA Competitor Analysis Tool</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        password = st.text_input("Enter password", type="password", key="password_input")
+        if st.button("Sign in", type="primary", use_container_width=True):
+            if password == correct_password:
+                st.session_state.authenticated = True
+                st.rerun()
+            else:
+                st.error("Incorrect password")
+
+    return False
+
 # US States list
 US_STATES = [
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
@@ -74,6 +119,10 @@ def init_services() -> (
 def main() -> None:
     """Run the main application."""
     st.set_page_config(**STREAMLIT_CONFIG)
+
+    # Password gate — blocks everything until authenticated
+    if not check_password():
+        st.stop()
 
     # Tuscany Strategy CSS (same branding as ECE tool)
     st.markdown(
