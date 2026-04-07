@@ -1,0 +1,35 @@
+# Git attributes for proper release packaging
+
+# Ensure consistent line endings
+* text=auto eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.ini text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+
+# Archive files for releases
+*.zip export-ignore
+*.tar.gz export-ignore
+
+# Development files to exclude from GitHub's download ZIP
+.pre-commit-config.yaml export-ignore
+pyproject.toml export-ignore
+pytest.ini export-ignore
+Dockerfile export-ignore
+docker-compose.yml export-ignore
+.dockerignore export-ignore
+requirements-dev.txt export-ignore
+tests/ export-ignore
+scripts/ export-ignore
+CLAUDE.md export-ignore
