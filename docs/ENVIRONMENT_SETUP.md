@@ -80,9 +80,9 @@ After editing, your `.env` file should look something like this:
 
 ```
 # Google Maps API Configuration
-GOOGLE_MAPS_API_KEY=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY  # pragma: allowlist secret
+GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 ```
-(Note: This is a fake key for example purposes)
+(Replace with your actual API key)
 
 **To verify it's set correctly:**
 ```bash
@@ -90,7 +90,7 @@ GOOGLE_MAPS_API_KEY=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY  # pragma: allowlist
 cat .env
 
 # Should output something like:
-# GOOGLE_MAPS_API_KEY=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY  # pragma: allowlist secret
+# GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 ```
 
 ### 3e. Important Notes
