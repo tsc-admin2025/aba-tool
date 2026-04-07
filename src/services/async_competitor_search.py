@@ -122,7 +122,7 @@ class AsyncCompetitorSearchService:
                     "lat": place["geometry"]["location"]["lat"],
                     "lng": place["geometry"]["location"]["lng"],
                     "rating": place.get("rating"),
-                    "user_ratings_total": place.get("user_ratings_total", 0),
+                    "user_ratings_total": place.get("user_ratings_total") or 0,
                     "types": place.get("types", []),
                     "vicinity": place.get("vicinity", ""),
                     "search_term": search_term,
@@ -206,7 +206,7 @@ class AsyncCompetitorSearchService:
                     duration_info = route_result.get("duration", {})
                     duration_seconds = duration_info.get("value")
                     if duration_seconds is not None:
-                        drive_time_minutes = duration_seconds // 60
+                        drive_time_minutes = int(duration_seconds // 60)
             elif isinstance(route_results[i], Exception):
                 logger.error(f"Route calculation failed for competitor {i}: {route_results[i]}")
 
