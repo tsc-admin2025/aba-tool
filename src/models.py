@@ -3,7 +3,7 @@
 from enum import Enum
 from typing import Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class ServiceType(str, Enum):
@@ -119,11 +119,46 @@ class Competitor(BaseModel):
     name: str = Field(..., description="Business name")
     place_id: str = Field(..., description="Google Places ID")
     location: Location = Field(..., description="Geographic location")
-    rating: Optional[float] = Field(None, ge=0, le=5, description="Google rating")
+    rating: Optional[float] = Field(None, description="Google rating")
     user_ratings_total: int = Field(0, ge=0, description="Total number of ratings")
     vicinity: str = Field("", description="Address vicinity")
     search_term: str = Field(..., description="Search term that found this competitor")
     types: List[str] = Field(default_factory=list, description="Google Places types")
+
+    @field_validator("rating", mode="before")
+    @classmethod
+    def coerce_rating(cls, v):
+        if v is None:
+            return None
+        try:
+            return float(v)
+        except (ValueError, TypeError):
+            return None
+
+    @field_validator("user_ratings_total", mode="before")
+    @classmethod
+    def coerce_ratings_total(cls, v):
+        if v is None:
+            return 0
+        try:
+            return int(v)
+        except (ValueError, TypeError):
+            return 0
+
+    @field_validator("vicinity", mode="before")
+    @classmethod
+    def coerce_vicinity(cls, v):
+        return str(v) if v is not None else ""
+
+    @field_validator("drive_time_minutes", mode="before")
+    @classmethod
+    def coerce_drive_time(cls, v):
+        if v is None:
+            return None
+        try:
+            return int(v)
+        except (ValueError, TypeError):
+            return None
 
     # Service type classification
     service_type: ServiceType = Field(
