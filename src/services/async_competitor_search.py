@@ -14,6 +14,14 @@ from src.models import Location
 logger = logging.getLogger(__name__)
 
 
+def _extract_zip_code(place_details: Dict[str, Any]) -> Optional[str]:
+    """Extract ZIP/postal code from Google Places address_components."""
+    for component in place_details.get("address_components", []):
+        if "postal_code" in component.get("types", []):
+            return component.get("long_name")
+    return None
+
+
 class AsyncCompetitorSearchService:
     """Async service for searching competitors with parallel API calls."""
 
@@ -360,15 +368,19 @@ class AsyncCompetitorSearchService:
                     else:
                         operating_hours = None
 
+                    zip_code = _extract_zip_code(place_details)
+
                     enhanced_data["website"] = website
                     enhanced_data["phone_number"] = phone_number
                     enhanced_data["operating_hours"] = operating_hours
                     enhanced_data["google_maps_url"] = google_maps_url
+                    enhanced_data["zip_code"] = zip_code
                 else:
                     enhanced_data["website"] = None
                     enhanced_data["phone_number"] = None
                     enhanced_data["operating_hours"] = None
                     enhanced_data["google_maps_url"] = None
+                    enhanced_data["zip_code"] = None
             elif isinstance(details_results[i], Exception):
                 logger.error(
                     f"Place details request failed for competitor {i}: {details_results[i]}"
@@ -377,11 +389,13 @@ class AsyncCompetitorSearchService:
                 enhanced_data["phone_number"] = None
                 enhanced_data["operating_hours"] = None
                 enhanced_data["google_maps_url"] = None
+                enhanced_data["zip_code"] = None
             else:
                 enhanced_data["website"] = None
                 enhanced_data["phone_number"] = None
                 enhanced_data["operating_hours"] = None
                 enhanced_data["google_maps_url"] = None
+                enhanced_data["zip_code"] = None
 
             enhanced_competitors.append(enhanced_data)
 
@@ -405,7 +419,7 @@ class AsyncCompetitorSearchService:
     def _sync_place_details(self, place_id: str) -> Optional[Dict[str, Any]]:
         """Perform synchronous place details request for use in thread pool."""
         try:
-            fields = ["website", "formatted_phone_number", "opening_hours", "url"]
+            fields = ["website", "formatted_phone_number", "opening_hours", "url", "address_component"]
             result = self.sync_client.place(place_id=place_id, fields=fields)
 
             if result and "result" in result:

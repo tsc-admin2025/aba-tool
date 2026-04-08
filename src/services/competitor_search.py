@@ -10,6 +10,14 @@ from src.models import Location
 logger = logging.getLogger(__name__)
 
 
+def _extract_zip_code(place_details: Dict[str, Any]) -> Optional[str]:
+    """Extract ZIP/postal code from Google Places address_components."""
+    for component in place_details.get("address_components", []):
+        if "postal_code" in component.get("types", []):
+            return component.get("long_name")
+    return None
+
+
 class CompetitorSearchService:
     """Service for searching competitors near a location with optional async support."""
 
@@ -230,6 +238,7 @@ class CompetitorSearchService:
                             "formatted_phone_number",
                             "opening_hours",
                             "url",
+                            "address_component",
                         ],
                     )
 
@@ -244,20 +253,25 @@ class CompetitorSearchService:
                         else:
                             operating_hours = None
 
+                        zip_code = _extract_zip_code(place_details)
+
                         enhanced_data["website"] = website
                         enhanced_data["phone_number"] = phone_number
                         enhanced_data["operating_hours"] = operating_hours
                         enhanced_data["google_maps_url"] = google_maps_url
+                        enhanced_data["zip_code"] = zip_code
                     else:
                         enhanced_data["website"] = None
                         enhanced_data["phone_number"] = None
                         enhanced_data["operating_hours"] = None
                         enhanced_data["google_maps_url"] = None
+                        enhanced_data["zip_code"] = None
                 else:
                     enhanced_data["website"] = None
                     enhanced_data["phone_number"] = None
                     enhanced_data["operating_hours"] = None
                     enhanced_data["google_maps_url"] = None
+                    enhanced_data["zip_code"] = None
 
                 enhanced_competitors.append(enhanced_data)
 
@@ -271,6 +285,7 @@ class CompetitorSearchService:
                 comp["phone_number"] = None
                 comp["operating_hours"] = None
                 comp["google_maps_url"] = None
+                comp["zip_code"] = None
             return competitors
 
     def search_and_enhance_competitors(

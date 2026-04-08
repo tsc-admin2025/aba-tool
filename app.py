@@ -567,6 +567,7 @@ def display_multi_location_results(location_results: dict[str, Any]) -> None:
                         "Location Address": result.client_location.formatted_address,
                         "Competitor Name": comp.name,
                         "Competitor Address": comp.vicinity,
+                        "Competitor ZIP Code": comp.zip_code or "N/A",
                         "Service Type": comp.effective_service_type.value,
                         "Rating": comp.rating,
                         "Reviews": comp.user_ratings_total,
@@ -621,6 +622,7 @@ def display_multi_location_results(location_results: dict[str, Any]) -> None:
                         {
                             "Name": comp.name,
                             "Address": comp.vicinity,
+                            "ZIP Code": comp.zip_code or "N/A",
                             "Service Type": comp.display_service_type,
                             "Rating": comp.rating,
                             "Reviews": comp.user_ratings_total,

@@ -96,6 +96,7 @@ class CompetitorAnalysisService:
                 service_type=service_type,
                 distance_miles=comp_data.get("distance_miles"),
                 drive_time_minutes=comp_data.get("drive_time_minutes"),
+                zip_code=comp_data.get("zip_code"),
                 website=comp_data.get("website"),
                 phone_number=comp_data.get("phone_number"),
                 operating_hours=comp_data.get("operating_hours"),

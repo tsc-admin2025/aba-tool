@@ -304,6 +304,7 @@ def render_all_competitors_tab(
             {
                 "Name": c.name,
                 "Address": c.vicinity,
+                "ZIP Code": c.zip_code or "N/A",
                 "Service Type": c.display_service_type,
                 "Rating": c.rating,
                 "Reviews": c.user_ratings_total,
@@ -334,6 +335,7 @@ def render_all_competitors_tab(
             {
                 "Name": c.name,
                 "Address": c.vicinity,
+                "ZIP Code": c.zip_code or "N/A",
                 "Service Type": c.effective_service_type.value,
                 "Rating": c.rating,
                 "Reviews": c.user_ratings_total,

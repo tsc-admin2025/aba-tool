@@ -176,6 +176,9 @@ class Competitor(BaseModel):
         None, description="Drive time from client location in minutes"
     )
 
+    # Address details
+    zip_code: Optional[str] = Field(None, description="ZIP/postal code from Google Places")
+
     # Additional business information from Places Details API
     website: Optional[str] = Field(None, description="Competitor website URL")
     phone_number: Optional[str] = Field(None, description="Competitor phone number")

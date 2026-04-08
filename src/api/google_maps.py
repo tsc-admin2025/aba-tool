@@ -257,7 +257,7 @@ class GoogleMapsClient:
 
             # Default fields if none specified
             if fields is None:
-                fields = ["website", "formatted_phone_number", "opening_hours", "url"]
+                fields = ["website", "formatted_phone_number", "opening_hours", "url", "address_component"]
 
             result = self.client.place(place_id=place_id, fields=fields)
 

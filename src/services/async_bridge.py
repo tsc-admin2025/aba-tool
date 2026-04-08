@@ -120,4 +120,5 @@ class AsyncBridgeService:
                 comp["phone_number"] = None
                 comp["operating_hours"] = None
                 comp["google_maps_url"] = None
+                comp["zip_code"] = None
             return competitors
